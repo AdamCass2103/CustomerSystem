@@ -1,16 +1,62 @@
 #include <iostream>
+#include <vector>
+#include <fstream>
+#include "Customer.h"
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the <b>lang</b> variable name to see how CLion can help you rename it.
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+std::vector<Customer> customers;
 
-    for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
+void addCustomer() {
+    int id;
+    std::string title, name, type;
+    std::vector<int> purchases;
+    std::cout << "Enter ID, title, name, type, number of purchases: ";
+    int count;
+    std::cin >> id >> title >> name >> type >> count;
+    for (int i = 0; i < count; ++i) {
+        int purchase;
+        std::cout << "Purchase " << i+1 << ": ";
+        std::cin >> purchase;
+        purchases.push_back(purchase);
     }
+    customers.emplace_back(id, title, name, type, purchases);
+}
+
+void displayCustomers() {
+    for (const auto& c : customers) {
+        std::cout << c << std::endl;
+    }
+}
+
+void saveToFile() {
+    std::ofstream file("customers.txt");
+    for (const auto& c : customers) {
+        file << c << std::endl;
+    }
+    file.close();
+}
+
+void loadFromFile() {
+    std::ifstream file("customers.txt");
+    Customer c;
+    customers.clear();
+    while (file >> c) {
+        customers.push_back(c);
+    }
+    file.close();
+}
+
+int main() {
+    int choice;
+    do {
+        std::cout << "\n1. Add Customer\n2. Display All\n3. Load from File\n4. Save to File\n0. Exit\nChoice: ";
+        std::cin >> choice;
+        switch (choice) {
+            case 1: addCustomer(); break;
+            case 2: displayCustomers(); break;
+            case 3: loadFromFile(); break;
+            case 4: saveToFile(); break;
+        }
+    } while (choice != 0);
 
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
