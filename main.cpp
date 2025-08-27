@@ -1,24 +1,40 @@
 #include <iostream>
-#include <vector>
 #include <fstream>
-#include "Customer.h"
+#include <vector>
+#include "customer.h"
 
 std::vector<Customer> customers;
 
 void addCustomer() {
     int id;
-    std::string title, name, type;
+    std::string name, email, address;
     std::vector<int> purchases;
-    std::cout << "Enter ID, title, name, type, number of purchases: ";
     int count;
-    std::cin >> id >> title >> name >> type >> count;
+
+    std::cout << "Enter ID: ";
+    std::cin >> id;
+    std::cin.ignore();
+
+    std::cout << "Enter name: ";
+    std::getline(std::cin, name);
+
+    std::cout << "Enter email: ";
+    std::getline(std::cin, email);
+
+    std::cout << "Enter address: ";
+    std::getline(std::cin, address);
+
+    std::cout << "Number of purchases: ";
+    std::cin >> count;
+
     for (int i = 0; i < count; ++i) {
         int purchase;
-        std::cout << "Purchase " << i+1 << ": ";
+        std::cout << "Purchase " << i + 1 << ": ";
         std::cin >> purchase;
         purchases.push_back(purchase);
     }
-    customers.emplace_back(id, title, name, type, purchases);
+
+    customers.emplace_back(id, name, email, address, purchases);
 }
 
 void displayCustomers() {
@@ -50,6 +66,8 @@ int main() {
     do {
         std::cout << "\n1. Add Customer\n2. Display All\n3. Load from File\n4. Save to File\n0. Exit\nChoice: ";
         std::cin >> choice;
+        std::cin.ignore();
+
         switch (choice) {
             case 1: addCustomer(); break;
             case 2: displayCustomers(); break;
